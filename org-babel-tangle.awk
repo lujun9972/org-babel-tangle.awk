@@ -27,8 +27,8 @@ function collect_src_block(_ARGVEND_, src_block, src_lines,idx,i,min_blank_num)
     while($0 !~ org_babel_src_regexp_end){
         src_lines[idx] = $0;
         idx++;
-        if($0 !~ "^[[:space:]]*$"){ # 跳过全空的行
-            match($0,"^ *");        # 只把空格删掉，不能把TAB删掉,否则makefile用不了
+        if($0 !~ "^[[:space:]]*$"){ # skip blank lines
+            match($0,"^ *");        # We should only delete the space, since the TAB is import in the makefile
             min_blank_num = min(RLENGTH,min_blank_num);
         }
         getline;
