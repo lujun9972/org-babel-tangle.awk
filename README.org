@@ -1,0 +1,23 @@
+#+TITLE: README
+#+AUTHOR: lujun9972
+#+TAGS: org-babel-tangle.awk
+#+DATE: [2018-06-27 三 17:13]
+#+LANGUAGE:  zh-CN
+#+OPTIONS:  H:6 num:nil toc:t \n:nil ::t |:t ^:nil -:nil f:t *:t <:nil
+
+* What is it?
+This is a re-implementation of the Org-Mode function org-babel-tangle, in Awk.
+
+I write it because someday I saw the [[https://github.com/thblt/org-babel-tangle.py][org-babel-tangle.py]] project, and then I thought it would be fun to write an awk version one.
+
+* Usage
+Usage is very simple, put this program somewhere in $PATH, then:
+
+#+BEGIN_SRC shell
+  org-babel-tangle.awk dotfile.org
+#+END_SRC
+
+* Limits
+Just like the [[https://github.com/thblt/org-babel-tangle.py][org-babel-tangle.py]]. All it does is routing lines of text to output files and fixing indentation, and even don't support the TRAMP style path.
+
+Sine I am pretty new at =awk=, any pull request is welcome, Thanks.
