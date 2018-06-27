@@ -1,6 +1,7 @@
 #! /usr/bin/awk -f
 BEGIN{
     IGNORECASE=1;
+    # LINT=1;
     org_babel_src_regexp_indent="^([ \t]*)#\\+begin_src[ \t]+";
     org_babel_src_regexp_lang="([^ \f\t\n\r\v]+)[ \t]*";
     org_babel_src_regexp_switches="([^\":]*\"[^\"*]*\"[^\":]*|[^\":]*)";
@@ -35,22 +36,48 @@ function collect_src_block(_ARGVEND_, src_block, src_lines,idx,i,min_blank_num)
 
     for(i=0; i<idx; i++)
     {
-        src_block = src_block substr(src_lines[i], min_blank_num+1) "\n";
+        src_block = src_block substr(src_lines[i], min_blank_num+1) ORS;
     }
     return src_block;
+}
+
+function command(cmd, _ARGVEND_, output)
+{
+    cmd|getline output;
+    close(cmd);
+    return output;
+}
+
+function realpath(path)
+{
+    return command("realpath " path);
+}
+
+function dirname(path)
+{
+    return command("dirname " path);
+}
+
+function mkdir(dir)
+{
+    return system("mkdir -p" dir)
 }
 
 {
     if (match($0, org_babel_src_regexp, result))
     {
         file=result[3];
-        codes[file]=codes[file] collect_src_block()
+        codes[file]=codes[file] collect_src_block();
     }
 }
 
 END{
     for (file in codes)
     {
-        print codes[file] >file
+        absolute_path=realpath(file);
+        dir=dirname(absolute_path)
+        mkdir(dir)
+        printf("Tangle codes into %s\n", absolute_path);
+        print codes[file] >absolute_path;
     }
 }
